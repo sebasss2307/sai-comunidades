@@ -1,0 +1,91 @@
+.demoRoleSwitcher {
+  position: fixed;
+  right: max(12px, env(safe-area-inset-right, 0px));
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  width: min(320px, calc(100vw - 24px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
+  padding: 14px 16px;
+  border: 1px dashed var(--green);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--shadow);
+  font-size: 0.78rem;
+  color: var(--ink);
+}
+
+.demoRoleSwitcher__title {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+.demoRoleSwitcher__hint {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.demoRoleSwitcher__hint code {
+  font-size: 0.82em;
+  color: var(--green);
+  word-break: break-all;
+}
+
+.demoRoleSwitcher__actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.demoRoleSwitcher__btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--green);
+  border-radius: 999px;
+  padding: 8px 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 40px;
+}
+
+.demoRoleSwitcher__btn:hover {
+  background: #e8e6df;
+}
+
+.demoRoleSwitcher__btn--active {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fff;
+}
+
+.demoRoleSwitcher__btn--active:hover {
+  background: var(--green2);
+}
+
+@media (max-width: 560px) {
+  .demoRoleSwitcher {
+    left: max(12px, env(safe-area-inset-left, 0px));
+    right: max(12px, env(safe-area-inset-right, 0px));
+    width: auto;
+    max-width: none;
+    padding: 12px;
+  }
+
+  .demoRoleSwitcher__hint {
+    font-size: 0.72rem;
+  }
+
+  .demoRoleSwitcher__hint br {
+    display: none;
+  }
+
+  .demoRoleSwitcher__hint code {
+    display: inline-block;
+    margin-top: 4px;
+  }
+}

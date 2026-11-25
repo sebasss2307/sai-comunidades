@@ -1,0 +1,52 @@
+/** Campos de formulario: siempre fondo claro y texto legible (sin herencia del dark mode). */
+.sai-landing {
+  color-scheme: light;
+}
+
+.sai-landing input.authField,
+.sai-landing textarea.authField,
+.sai-landing input.field,
+.sai-landing textarea.field,
+.sai-landing select.field {
+  background-color: #ffffff !important;
+  color: #242b28 !important;
+  border: 1px solid #dcded7 !important;
+  box-shadow: none;
+  caret-color: #0f3b34;
+}
+
+.sai-landing input.authField::placeholder,
+.sai-landing textarea.authField::placeholder,
+.sai-landing input.field::placeholder,
+.sai-landing textarea.field::placeholder {
+  color: #69716c !important;
+  opacity: 1;
+}
+
+.sai-landing input.authField:focus,
+.sai-landing textarea.authField:focus,
+.sai-landing input.field:focus,
+.sai-landing textarea.field:focus,
+.sai-landing select.field:focus {
+  background-color: #ffffff !important;
+  color: #242b28 !important;
+  border-color: #0f3b34 !important;
+  outline: 2px solid rgba(15, 59, 52, 0.12) !important;
+}
+
+.sai-landing .postForm {
+  background: #f7f5f0;
+}
+
+.sai-landing .postForm .field,
+.sai-landing .authPanel .authField {
+  background-color: #ffffff !important;
+}
+
+.sai-landing input.authField:-webkit-autofill,
+.sai-landing input.field:-webkit-autofill,
+.sai-landing textarea.field:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #242b28 !important;
+  transition: background-color 99999s ease-in-out 0s;
+}

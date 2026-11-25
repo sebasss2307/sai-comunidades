@@ -1,0 +1,180 @@
+/* Vista teléfono: safe areas, tap targets, espacio para demo flotante */
+
+@media (max-width: 900px) {
+  .sai-landing {
+    padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.sai-landing .appSection {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* Anula reglas legacy de landing-static que ocultan .links en el drawer */
+@media (max-width: 900px) {
+  .sai-landing .navDrawer--open .navDrawer__links,
+  .sai-landing .navDrawer--open .siteNavLinks {
+    display: flex !important;
+    position: static;
+    flex-direction: column;
+    background: transparent;
+    padding: 0;
+    border: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .sai-landing .wrap {
+    width: min(100% - 24px, 1160px);
+  }
+
+  .sai-landing .topbar .wrap {
+    font-size: 0.65rem;
+    padding: 8px 0;
+    line-height: 1.35;
+  }
+
+  .sai-landing .navinner {
+    min-height: 58px;
+    padding: 8px 0;
+  }
+
+  .sai-landing .brand img {
+    width: 112px;
+    max-height: 48px;
+  }
+
+  .sai-landing .navMenuBtn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .sai-landing .navDrawer {
+    left: 10px;
+    right: 10px;
+    padding: 14px 12px calc(16px + env(safe-area-inset-bottom, 0px));
+    max-height: min(82dvh, 580px);
+    border-radius: 20px;
+  }
+
+  .sai-landing .navDrawer__links a,
+  .sai-landing .navDrawer__link {
+    min-height: 46px;
+    padding: 11px 14px;
+    font-size: 0.96rem;
+  }
+
+  .sai-landing .appSection {
+    padding: 40px 0 56px;
+  }
+
+  .sai-landing .appPageTitle {
+    font-size: 1.85rem;
+  }
+
+  .sai-landing .authPage {
+    padding: 36px 0 64px;
+  }
+
+  .sai-landing .authPanel {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+
+  .sai-landing .authDemoNote {
+    margin-top: 16px;
+    padding: 12px;
+    font-size: 0.74rem;
+    line-height: 1.45;
+  }
+
+  .sai-landing .forumPanel,
+  .sai-landing .infoCard {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .sai-landing .adminWrap {
+    gap: 16px;
+  }
+
+  .sai-landing .adminSidebar {
+    border-radius: 16px;
+    padding: 14px 12px;
+  }
+
+  .sai-landing .adminNav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  .sai-landing .adminNav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+  }
+
+  .sai-landing .adminContactToolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sai-landing .adminContactFilters {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sai-landing .adminContactFilterField select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sai-landing .adminContactFormLink {
+    width: 100%;
+    text-align: center;
+  }
+
+  .sai-landing .adminContactModal {
+    width: calc(100% - 20px);
+    max-height: min(90dvh, 640px);
+    margin: 10px;
+  }
+
+  .sai-landing .metricGrid {
+    gap: 10px;
+  }
+
+  .sai-landing .metricCard {
+    padding: 16px;
+  }
+
+  .sai-landing .footer {
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .sai-landing .threadLink {
+    padding: 16px;
+  }
+
+  .sai-landing .ctaBox {
+    padding: 24px 18px;
+  }
+
+  /* Evita zoom al enfocar inputs en iOS */
+  .sai-landing input,
+  .sai-landing select,
+  .sai-landing textarea,
+  .sai-landing .authField,
+  .sai-landing .field {
+    font-size: 16px;
+  }
+}

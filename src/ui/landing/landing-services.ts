@@ -1,0 +1,1 @@
+export type { LandingServiceItem as LandingService } from "@/domain/landing-service";
