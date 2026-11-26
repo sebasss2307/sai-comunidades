@@ -3,33 +3,34 @@ import { redirect } from "next/navigation";
 
 import { getAuthService } from "@/auth/services/mock-auth-service";
 import { requireAdmin } from "@/auth/authorization";
+import { isGitHubPagesBuild } from "@/lib/is-github-pages";
 import { getUserRepository } from "@/repositories";
-import { AdminUsersTable } from "@/ui/admin/admin-users-table";
-import { MarketingPageHeader } from "@/ui/layout/marketing-page-header";
+
+import { AdminUsersPageShell } from "@/app/(app)/admin/usuarios/admin-usuarios-page-shell";
 
 export const metadata: Metadata = {
   title: "Usuarios · Admin",
 };
 
 export default async function AdminUsersPage() {
+  const isGhPages = isGitHubPagesBuild();
   const auth = getAuthService();
-  let session;
+  let session = null;
   try {
     session = requireAdmin(await auth.getSession());
   } catch {
-    redirect("/");
+    if (!isGhPages) {
+      redirect("/");
+    }
   }
+
   const repo = getUserRepository();
   const users = await repo.listAll();
 
   return (
-    <>
-      <MarketingPageHeader
-        eyebrow="Comunidad"
-        title="Usuarios"
-        lead={`${users.length} cuentas en el entorno MOCK.`}
-      />
-      <AdminUsersTable users={users} currentUserId={session.user.id} />
-    </>
+    <AdminUsersPageShell
+      users={users}
+      serverCurrentUserId={session?.user.id ?? null}
+    />
   );
 }
