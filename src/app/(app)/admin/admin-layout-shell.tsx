@@ -55,7 +55,7 @@ export function AdminLayoutShell({
   }
 
   return (
-    <section className="appSection appSection--admin" style={{ paddingTop: 48 }}>
+    <section className="appSection appSection--admin">
       <div className="wrap adminWrap">
         <aside className="adminSidebar">
           <div className="eyebrow">Admin CMS</div>

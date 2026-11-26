@@ -4,16 +4,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { readClientDemoSession } from "@/auth/client-demo-session";
+import {
+  DEMO_SESSION_CHANGE_EVENT,
+  readClientDemoSession,
+} from "@/auth/client-demo-session";
 import { isAdmin } from "@/domain/user";
 import { publicAssetPath } from "@/lib/public-asset-path";
-import { LogoutButton } from "@/ui/layout/logout-button";
-import { NavCtaGroup } from "@/ui/layout/nav-cta-group";
+import { MarketingNavActions } from "@/ui/layout/marketing-nav-actions";
 import { NavMenuButton } from "@/ui/layout/nav-menu-button";
 import { useAppPathname } from "@/ui/layout/use-app-pathname";
 import { useNavDrawer } from "@/ui/layout/use-nav-drawer";
 
 const links = [
+  { href: "#inicio", label: "Inicio" },
   { href: "#servicios", label: "Servicios" },
   { href: "#seguridad", label: "Seguridad" },
   { href: "#nosotros", label: "Nosotros" },
@@ -32,67 +35,53 @@ type LandingNavProps = {
 export function LandingNav({
   initialIsAdmin = false,
   initialIsLoggedIn = false,
-  initialUserName = null,
+  initialUserName: _initialUserName = null,
 }: LandingNavProps) {
   const { open, close, toggle, panelId } = useNavDrawer();
   const pathname = useAppPathname();
   const [isLoggedIn, setIsLoggedIn] = useState(initialIsLoggedIn);
   const [isAdminUser, setIsAdminUser] = useState(initialIsAdmin);
-  const [userName, setUserName] = useState(initialUserName);
 
   useEffect(() => {
+    const syncDemoSession = () => {
+      if (process.env.NEXT_PUBLIC_SHOW_DEMO_UI === "true") {
+        const session = readClientDemoSession();
+        setIsLoggedIn(Boolean(session));
+        setIsAdminUser(session ? isAdmin(session.user) : false);
+        return;
+      }
+      setIsLoggedIn(initialIsLoggedIn);
+      setIsAdminUser(initialIsAdmin);
+    };
+
+    syncDemoSession();
+
     if (process.env.NEXT_PUBLIC_SHOW_DEMO_UI === "true") {
-      const session = readClientDemoSession();
-      setIsLoggedIn(Boolean(session));
-      setIsAdminUser(session ? isAdmin(session.user) : false);
-      setUserName(session?.user.name ?? null);
-      return;
+      window.addEventListener(DEMO_SESSION_CHANGE_EVENT, syncDemoSession);
+      return () => {
+        window.removeEventListener(DEMO_SESSION_CHANGE_EVENT, syncDemoSession);
+      };
     }
-    setIsLoggedIn(initialIsLoggedIn);
-    setIsAdminUser(initialIsAdmin);
-    setUserName(initialUserName);
-  }, [pathname, initialIsAdmin, initialIsLoggedIn, initialUserName]);
+  }, [pathname, initialIsAdmin, initialIsLoggedIn]);
+
+  const isMemberSession = isLoggedIn && !isAdminUser;
 
   const navinnerClass = [
     "wrap",
     "navinner",
     isLoggedIn ? "navinner--auth" : "",
     isLoggedIn && isAdminUser ? "navinner--admin-session" : "",
+    isMemberSession ? "navinner--member-session" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
-  const drawerActions = isLoggedIn ? (
-    <>
-      {isAdminUser ? (
-        <NavCtaGroup isAdmin compact showContact onNavigate={close} />
-      ) : (
-        <NavCtaGroup isAdmin={false} onNavigate={close} />
-      )}
-      <div className="navAccountGroup">
-        <Link className="btn light" href="/perfil" onClick={close}>
-          Mi perfil
-          {userName ? (
-            <span className="navUserName"> - {userName}</span>
-          ) : null}
-        </Link>
-        <LogoutButton className="btn light">Salir</LogoutButton>
-      </div>
-    </>
-  ) : (
-    <>
-      <Link
-        className="btn light"
-        href="/iniciar-sesion"
-        onClick={close}
-      >
-        Entrar
-      </Link>
-      <Link className="btn light" href="/registro" onClick={close}>
-        Registro
-      </Link>
-      <NavCtaGroup isAdmin={isAdminUser} onNavigate={close} />
-    </>
+  const drawerActions = (
+    <MarketingNavActions
+      isLoggedIn={isLoggedIn}
+      isAdmin={isAdminUser}
+      onNavigate={close}
+    />
   );
 
   return (
@@ -105,16 +94,16 @@ export function LandingNav({
           </span>
         </div>
       </div>
+      {open ? (
+        <button
+          type="button"
+          className="navScrim"
+          aria-label="Cerrar menú"
+          onClick={close}
+          tabIndex={-1}
+        />
+      ) : null}
       <header className={`nav${open ? " nav--open" : ""}`}>
-        {open ? (
-          <button
-            type="button"
-            className="navScrim"
-            aria-label="Cerrar menú"
-            onClick={close}
-            tabIndex={-1}
-          />
-        ) : null}
         <div className={navinnerClass}>
           <Link className="brand" href="/#inicio" aria-label="SAI Comunidades, inicio">
             <Image
@@ -137,7 +126,11 @@ export function LandingNav({
                   {item.label}
                 </a>
               ))}
-              <Link href="/foro" onClick={close}>
+              <Link
+                href="/foro"
+                onClick={close}
+                className="navDrawer__link navDrawer__link--foro"
+              >
                 Foro
               </Link>
             </nav>

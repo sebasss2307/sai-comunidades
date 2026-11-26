@@ -17,7 +17,17 @@ export function useNavDrawer() {
   }, [pathname, close]);
 
   useEffect(() => {
-    if (!open) return;
+    const root = document.querySelector<HTMLElement>(".sai-landing");
+    if (root) {
+      root.classList.toggle("sai-landing--menu-open", open);
+    }
+
+    if (!open) {
+      return () => {
+        root?.classList.remove("sai-landing--menu-open");
+      };
+    }
+
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
     };
@@ -26,6 +36,7 @@ export function useNavDrawer() {
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      root?.classList.remove("sai-landing--menu-open");
     };
   }, [open, close]);
 

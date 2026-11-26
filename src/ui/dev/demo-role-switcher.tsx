@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { demoRoleAction } from "@/app/actions/auth";
 import {
+  DEMO_SESSION_CHANGE_EVENT,
   getClientDemoRole,
   impersonateClientDemo,
   isClientDemoUiEnabled,
@@ -11,6 +12,7 @@ import {
 } from "@/auth/client-demo-session";
 import { MOCK_DEMO_PASSWORD } from "@/data/mock/users";
 import { publicAssetPath } from "@/lib/public-asset-path";
+import { useAppPathname } from "@/ui/layout/use-app-pathname";
 
 import "@/ui/dev/demo-role-switcher.css";
 
@@ -25,15 +27,27 @@ type DemoRoleSwitcherProps = {
 };
 
 export function DemoRoleSwitcher({ initialRole = "guest" }: DemoRoleSwitcherProps) {
+  const pathname = useAppPathname();
   const [activeRole, setActiveRole] = useState<ClientDemoRole>(initialRole);
 
   useEffect(() => {
     if (!isClientDemoUiEnabled()) return;
+    const syncRole = () => {
+      if (process.env.NEXT_PUBLIC_SHOW_DEMO_UI === "true") {
+        setActiveRole(getClientDemoRole());
+        return;
+      }
+      setActiveRole(initialRole);
+    };
+
+    syncRole();
+
     if (process.env.NEXT_PUBLIC_SHOW_DEMO_UI === "true") {
-      setActiveRole(getClientDemoRole());
-      return;
+      window.addEventListener(DEMO_SESSION_CHANGE_EVENT, syncRole);
+      return () => {
+        window.removeEventListener(DEMO_SESSION_CHANGE_EVENT, syncRole);
+      };
     }
-    setActiveRole(initialRole);
   }, [initialRole]);
 
   if (!isClientDemoUiEnabled()) return null;
@@ -43,9 +57,10 @@ export function DemoRoleSwitcher({ initialRole = "guest" }: DemoRoleSwitcherProp
   const onClientRole = (role: ClientDemoRole) => {
     impersonateClientDemo(role);
     setActiveRole(role);
-    const target =
-      role === "admin" ? "/admin" : role === "user" ? "/foro" : "/";
-    window.location.assign(publicAssetPath(target));
+    if (role === "user" || role === "admin") {
+      return;
+    }
+    window.location.assign(publicAssetPath("/"));
   };
 
   return (
@@ -84,6 +99,7 @@ export function DemoRoleSwitcher({ initialRole = "guest" }: DemoRoleSwitcherProp
           ) : (
             <form key={role} action={demoRoleAction}>
               <input type="hidden" name="role" value={role} />
+              <input type="hidden" name="returnTo" value={pathname || "/"} />
               <button type="submit" className={btnClass}>
                 {label}
               </button>

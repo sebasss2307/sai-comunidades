@@ -40,20 +40,51 @@
   min-width: 0;
 }
 
-.sai-landing .navDrawer__links > * + *,
-.sai-landing .links.navDrawer__links > * + * {
+.sai-landing .navDrawer__links > * + *:not(.navDrawer__link--foro),
+.sai-landing .links.navDrawer__links > * + *:not(.navDrawer__link--foro) {
   margin-left: clamp(6px, 0.9vw, 12px);
   padding-left: clamp(8px, 1vw, 14px);
   border-left: 1px solid rgba(15, 59, 52, 0.14);
 }
 
-.sai-landing .navDrawer__links a,
-.sai-landing .navDrawer__link {
+.sai-landing .navDrawer__links a:not(.navDrawer__link--foro),
+.sai-landing .navDrawer__link:not(.navDrawer__link--foro) {
   white-space: nowrap;
   font-size: clamp(0.74rem, 0.7rem + 0.18vw, 0.86rem);
   font-weight: 650;
   line-height: 1.2;
   letter-spacing: -0.01em;
+}
+
+.sai-landing .navDrawer__link--foro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border: 1.5px solid #0f3b34;
+  border-radius: 999px;
+  color: var(--green);
+  padding: 7px 14px;
+  font-size: clamp(0.74rem, 0.7rem + 0.18vw, 0.86rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: left;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.sai-landing .navDrawer__link--foro:hover {
+  background: rgba(15, 59, 52, 0.06);
+  color: #0f3b34;
+}
+
+.sai-landing .navDrawer__links > .navDrawer__link--foro {
+  margin-left: clamp(6px, 0.9vw, 12px);
+  padding-left: 16px;
 }
 
 .sai-landing .navUserName {
@@ -101,18 +132,363 @@
   letter-spacing: -0.02em;
 }
 
+/* CTA contacto: anillo engrosado (nav Conversemos + landing) */
+.sai-landing .navCtaCompact--contact,
+.sai-landing .btn.contactCtaRing {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  font-weight: 800;
+  border: 2px solid rgba(15, 59, 52, 0.92);
+  border-radius: 999px;
+  box-shadow:
+    0 10px 26px rgba(15, 59, 52, 0.24),
+    0 0 0 2px #f5f2ec,
+    0 0 0 5px rgba(15, 59, 52, 0.38);
+}
+
+.sai-landing .navCtaCompact--contact::before,
+.sai-landing .btn.contactCtaRing::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: inherit;
+  border: 2.5px solid rgba(15, 59, 52, 0.28);
+  pointer-events: none;
+  z-index: -1;
+  transition:
+    inset 0.22s ease,
+    border-color 0.22s ease,
+    border-width 0.22s ease;
+}
+
+.sai-landing .navCtaCompact--contact:hover,
+.sai-landing .btn.contactCtaRing:hover {
+  box-shadow:
+    0 14px 32px rgba(15, 59, 52, 0.32),
+    0 0 0 2px #f5f2ec,
+    0 0 0 5px rgba(15, 59, 52, 0.48);
+}
+
+.sai-landing .navCtaCompact--contact:hover::before,
+.sai-landing .btn.contactCtaRing:hover::before {
+  inset: -9px;
+  border-width: 3px;
+  border-color: rgba(15, 59, 52, 0.42);
+}
+
+.sai-landing .heroActions .btn.contactCtaRing {
+  margin: 8px 4px;
+}
+
+.sai-landing .ctaBox > .btn.contactCtaRing {
+  margin: 22px 6px 6px;
+}
+
+.sai-landing .navLoginBtn {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 650;
+  font-size: clamp(0.76rem, 0.72rem + 0.2vw, 0.84rem);
+  padding: 10px 12px;
+  box-shadow: none;
+}
+
+.sai-landing .navLoginBtn:hover {
+  background: rgba(15, 59, 52, 0.06);
+  color: var(--green);
+  transform: none;
+}
+
+.sai-landing .navDrawer__actions .navCtaCompact--contact {
+  padding: 12px 20px;
+  font-size: 0.88rem;
+  margin: 6px 4px;
+}
+
+/* —— Header dedicado del foro —— */
+.sai-landing .navinner--forum,
+.sai-landing .navinner--profile {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "back . actions";
+  align-items: center;
+  gap: 10px 14px;
+  min-height: 72px;
+}
+
+.sai-landing .navBackBtn {
+  position: relative;
+  z-index: 2;
+  grid-area: back;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: start;
+  font-weight: 650;
+  font-size: 0.84rem;
+  color: var(--green);
+  padding: 8px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sai-landing .navBackBtn:hover {
+  background: rgba(15, 59, 52, 0.06);
+}
+
+.sai-landing .navBackBtn__icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.sai-landing .navForumTitle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  width: max-content;
+  max-width: min(52vw, 280px);
+  font-size: clamp(1.02rem, 0.96rem + 0.35vw, 1.22rem);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green);
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sai-landing .navForumActions {
+  position: relative;
+  z-index: 2;
+  grid-area: actions;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+}
+
+.sai-landing .navinner--forum .navForumActions .navAccountGroup,
+.sai-landing .navinner--profile .navForumActions .navAccountGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.sai-landing .navinner--forum .navMenuBtn,
+.sai-landing .navinner--profile .navMenuBtn {
+  display: none;
+}
+
+.sai-landing .navForumMobilePanel {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .sai-landing .navinner--forum,
+.sai-landing .navinner--profile {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "back . menu"
+      "panel panel panel";
+  }
+
+  .sai-landing .navForumActions {
+    display: none;
+  }
+
+  .sai-landing .navinner--forum .navMenuBtn,
+  .sai-landing .navinner--profile .navMenuBtn {
+    position: relative;
+    z-index: 2;
+    grid-area: menu;
+    display: flex;
+    justify-self: end;
+  }
+
+  .sai-landing .navForumMobilePanel {
+    grid-area: panel;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(15, 59, 52, 0.08);
+    border-radius: 18px;
+    background: #f7f4ee;
+  }
+
+  .sai-landing .navForumMobilePanel--open {
+    display: flex;
+  }
+
+  .sai-landing .navForumMobilePanel .navDrawer__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    gap: 8px;
+  }
+
+  .sai-landing .navForumMobilePanel .navCtaCompact--contact {
+    order: -1;
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .sai-landing .navForumMobilePanel .navAccountGroup {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .sai-landing .navForumMobilePanel .navAccountGroup .navLoginBtn,
+  .sai-landing .navForumMobilePanel .navAccountGroup form,
+  .sai-landing .navForumMobilePanel .navLoginBtn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+}
+
 .sai-landing .navDrawer__eyebrow {
   display: none;
 }
 
+/* Fuera de `.nav` para que fixed cubra el viewport (evita containing block del header). */
+.sai-landing .nav.nav--open {
+  z-index: 32;
+}
+
 .sai-landing .navScrim {
-  display: none;
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 28;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  background: rgba(10, 32, 28, 0.48);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: background 0.25s ease, backdrop-filter 0.25s ease;
+}
+
+/* Móvil: un solo velo (scrim); barra sin vidrio crema ni blur extra en el menú */
+@media (max-width: 900px) {
+  .sai-landing .navScrim {
+    background: rgba(10, 32, 28, 0.5);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .sai-landing.sai-landing--menu-open .nav.nav--open,
+  .sai-landing .nav.nav--open {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom-color: transparent;
+    box-shadow: none;
+  }
+
+  .sai-landing .nav--open .navinner > .brand,
+  .sai-landing .nav--open .navinner > .navBackBtn,
+  .sai-landing .nav--open .navinner > .navForumTitle,
+  .sai-landing .nav--open .navinner > .navForumActions {
+    filter: none;
+    opacity: 0.38;
+  }
+
+  .sai-landing .nav--open .navDrawer,
+  .sai-landing .nav--open .navDrawer--open,
+  .sai-landing .nav--open .navForumMobilePanel,
+  .sai-landing .nav--open .navForumMobilePanel--open,
+  .sai-landing .nav--open .navMenuBtn {
+    filter: none;
+    -webkit-filter: none;
+  }
+}
+
+@media (max-width: 1400px) {
+  .sai-landing .nav--open {
+    background: rgba(245, 242, 236, 0.42);
+    backdrop-filter: none;
+  }
+
+  @media (max-width: 900px) {
+    .sai-landing .nav--open {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+
+  .sai-landing .nav--open .navinner {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .sai-landing .nav--open .navinner > .brand,
+  .sai-landing .nav--open .navinner > .navBackBtn,
+  .sai-landing .nav--open .navinner > .navForumTitle,
+  .sai-landing .nav--open .navinner > .navForumActions {
+    opacity: 0.28;
+    filter: blur(1.5px);
+    pointer-events: none;
+    transition: opacity 0.22s ease, filter 0.22s ease;
+  }
+
+  .sai-landing .nav--open .navMenuBtn {
+    position: relative;
+    z-index: 36;
+    opacity: 1;
+    filter: none;
+    pointer-events: auto;
+    box-shadow:
+      0 0 0 3px #fff,
+      0 0 0 5px rgba(15, 59, 52, 0.14),
+      0 18px 40px rgba(15, 59, 52, 0.32);
+  }
+
+  .sai-landing .nav--open .navMenuBtn--open {
+    transform: scale(1.06);
+    box-shadow:
+      0 0 0 3px #fff,
+      0 0 0 5px rgba(15, 59, 52, 0.2),
+      0 22px 46px rgba(15, 59, 52, 0.38);
+  }
+
+  .sai-landing .nav--open .navDrawer--open,
+  .sai-landing .nav--open .navForumMobilePanel--open {
+    z-index: 28;
+  }
 }
 
 /* Botón hamburguesa (solo móvil) */
 .sai-landing .navMenuBtn {
   display: none;
   flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   width: 44px;
   height: 44px;
   margin-left: auto;
@@ -132,23 +508,24 @@
 }
 
 .sai-landing .navMenuBtn--open {
-  background: var(--green);
-  border-color: var(--green);
-  color: #fff;
+  background: #fff;
+  border-color: rgba(15, 59, 52, 0.2);
+  color: #0f3b34;
 }
 
 .sai-landing .navMenuBtn__bar {
   display: block;
-  width: 16px;
-  height: 1.75px;
-  margin: 3.5px auto;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 3px;
+  margin: 0;
   border-radius: 99px;
   background: currentColor;
   transition: transform 0.22s ease, opacity 0.18s ease;
 }
 
 .sai-landing .navMenuBtn--open .navMenuBtn__bar:nth-child(1) {
-  transform: translateY(5.25px) rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
 }
 
 .sai-landing .navMenuBtn--open .navMenuBtn__bar:nth-child(2) {
@@ -156,69 +533,69 @@
 }
 
 .sai-landing .navMenuBtn--open .navMenuBtn__bar:nth-child(3) {
-  transform: translateY(-5.25px) rotate(-45deg);
+  transform: translateY(-8px) rotate(-45deg);
 }
 
-/* Desktop ancho: sesión admin con muchos botones → segunda fila ordenada */
-@media (min-width: 1101px) {
-  .sai-landing .navinner--admin-session {
-    flex-wrap: wrap;
-    align-items: center;
-    row-gap: 8px;
-  }
-
-  .sai-landing .navinner--admin-session .navDrawer {
-    flex: 1 1 100%;
-    order: 3;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px 10px;
-  }
-
-  .sai-landing .navinner--admin-session .navDrawer__links {
-    flex: 1 1 auto;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    row-gap: 4px;
-    min-width: 0;
-  }
-
-  .sai-landing .navinner--admin-session .navDrawer__actions {
-    flex: 0 1 auto;
-    margin-left: auto;
-    flex-wrap: wrap;
+/* Desktop: acciones en una sola fila (Conversemos + cuenta; admin sin Conversemos) */
+@media (min-width: 901px) {
+  .sai-landing .navinner--admin-session .navDrawer__actions,
+  .sai-landing .navinner--auth:not(.navinner--admin-session) .navDrawer__actions {
+    flex-wrap: nowrap;
     justify-content: flex-end;
-    gap: 6px;
-    max-width: 100%;
+    align-items: center;
+    gap: 8px;
+    max-width: none;
+    flex-shrink: 0;
   }
 
-  .sai-landing .navinner--admin-session .navCtaCompact--panel {
-    font-size: 0.74rem;
-    padding: 9px 11px;
-    line-height: 1.2;
-    text-align: center;
+  .sai-landing .navinner--admin-session .navAccountGroup,
+  .sai-landing .navinner--auth:not(.navinner--admin-session) .navAccountGroup {
+    margin-left: 0;
+    gap: 4px;
   }
 
   .sai-landing .navinner--cms .navDrawer {
     flex: 1 1 auto;
-    justify-content: flex-end;
+    justify-content: space-between;
     flex-wrap: nowrap;
   }
 
   .sai-landing .navinner--cms .navDrawer__links {
-    flex: 0 1 auto;
-    justify-content: flex-end;
+    flex: 1 1 0%;
+    min-width: 0;
+    justify-content: center;
   }
 
-  .sai-landing .navinner--auth:not(.navinner--admin-session) .navDrawer__actions {
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-    max-width: none;
+  .sai-landing .navinner--admin-session .navMenuBtn {
+    display: none;
+  }
+
+  .sai-landing .navinner--cms .navMenuBtn {
+    display: none;
+  }
+
+  .sai-landing .navinner--admin-session .navDrawer,
+  .sai-landing .navinner--cms .navDrawer {
+    display: flex;
+  }
+
+  .sai-landing .navinner--admin-session .navDrawer__links {
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+
+  .sai-landing .navinner--admin-session .navDrawer__actions {
+    flex-shrink: 0;
+  }
+
+  .sai-landing .navinner--admin-session .navAccountGroup {
     gap: 8px;
   }
 
-  .sai-landing .navinner--auth:not(.navinner--admin-session) .navAccountGroup {
-    margin-left: 0;
+  .sai-landing .navinner--admin-session .navAccountGroup .navLoginBtn,
+  .sai-landing .navinner--admin-session .navAccountGroup form {
+    flex: 0 0 auto;
+    width: auto;
   }
 }
 
@@ -238,28 +615,47 @@
   }
 }
 
-/* —— Menú desplegable (visitante ≤900px; con sesión ≤1100px) —— */
-@media (max-width: 1100px) {
-  .sai-landing .navinner--auth,
-  .sai-landing .navinner--cms {
+/* —— Menú desplegable (visitante/admin/cms ≤900px; miembro ≤1400px) —— */
+@media (max-width: 900px) {
+  .sai-landing .navinner--cms,
+  .sai-landing .navinner--auth.navinner--admin-session {
     flex-wrap: nowrap;
     align-items: center;
     min-height: 64px;
   }
 
-  .sai-landing .navinner--auth .navMenuBtn,
-  .sai-landing .navinner--cms .navMenuBtn {
-    display: grid;
-    place-items: center;
+  .sai-landing .navinner--cms .navMenuBtn,
+  .sai-landing .navinner--auth.navinner--admin-session .navMenuBtn {
+    display: flex;
   }
 
-  .sai-landing .navinner--auth .navDrawer,
-  .sai-landing .navinner--cms .navDrawer {
+  .sai-landing .navinner--cms .navDrawer,
+  .sai-landing .navinner--auth.navinner--admin-session .navDrawer {
     display: none;
   }
 
-  .sai-landing .navinner--auth .navDrawer--open,
-  .sai-landing .navinner--cms .navDrawer--open {
+  .sai-landing .navinner--cms .navDrawer--open,
+  .sai-landing .navinner--auth.navinner--admin-session .navDrawer--open {
+    display: flex;
+  }
+}
+
+@media (max-width: 1400px) {
+  .sai-landing .navinner--member-session {
+    flex-wrap: nowrap;
+    align-items: center;
+    min-height: 64px;
+  }
+
+  .sai-landing .navinner--member-session .navMenuBtn {
+    display: flex;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer {
+    display: none;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer--open {
     display: flex;
   }
 }
@@ -272,8 +668,7 @@
   }
 
   .sai-landing .navMenuBtn {
-    display: grid;
-    place-items: center;
+    display: flex;
   }
 
   .sai-landing .navDrawer {
@@ -285,13 +680,158 @@
   }
 }
 
-@media (max-width: 1100px) {
-  .sai-landing .nav {
+@media (min-width: 901px) and (max-width: 1400px) {
+  .sai-landing .nav:has(.navinner--member-session) {
     z-index: 30;
   }
 
-  .sai-landing .navinner--auth .navDrawer,
-  .sai-landing .navinner--cms .navDrawer {
+  .sai-landing .navinner--member-session .navDrawer {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 12px;
+    right: 12px;
+    flex: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    max-height: min(78dvh, 620px);
+    overflow-y: auto;
+    padding: 16px 14px 18px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(15, 59, 52, 0.1);
+    border-radius: 22px;
+    box-shadow: 0 24px 50px rgba(20, 42, 35, 0.16);
+    z-index: 26;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__eyebrow {
+    display: block;
+    margin: 0 6px 2px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a938c;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__links,
+  .sai-landing .navinner--member-session .siteNavLinks.navDrawer__links {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex: 0 0 auto;
+    width: 100%;
+    gap: 4px;
+    padding: 0;
+    border: none;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__links > * + * {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__links a:not(.navDrawer__link--foro),
+  .sai-landing .navinner--member-session .navDrawer__link:not(.navDrawer__link--foro) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 14px;
+    border: none;
+    border-radius: 14px;
+    white-space: normal;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--green);
+    background: transparent;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__links a:hover {
+    background: #f3efe7;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    margin-top: 2px;
+    padding: 12px;
+    border: 1px solid rgba(15, 59, 52, 0.08);
+    border-radius: 18px;
+    background: #f7f4ee;
+    gap: 8px;
+  }
+
+  .sai-landing .navinner--member-session .navAccountGroup {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .sai-landing .navinner--member-session .navAccountGroup .btn,
+  .sai-landing .navinner--member-session .navAccountGroup form {
+    flex: 1 1 50%;
+    justify-content: center;
+    width: auto;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__actions .btn,
+  .sai-landing .navinner--member-session .navDrawer__actions .navCtaCompact,
+  .sai-landing .navinner--member-session .navDrawer__actions form,
+  .sai-landing .navinner--member-session .navDrawer__actions a {
+    width: 100%;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__actions .btn,
+  .sai-landing .navinner--member-session .navDrawer__actions .navCtaCompact {
+    justify-content: center;
+    text-align: center;
+    min-height: 46px;
+    padding: 12px 16px;
+    border-radius: 999px;
+  }
+
+}
+
+/* Desktop ancho: cuenta sin invadir enlaces */
+@media (min-width: 1401px) {
+  .sai-landing .navinner--member-session .navDrawer__links {
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__actions {
+    flex-shrink: 0;
+  }
+
+  .sai-landing .navinner--member-session .navAccountGroup {
+    gap: 4px;
+  }
+
+  .sai-landing .navinner--member-session .navAccountGroup .navLoginBtn,
+  .sai-landing .navinner--member-session .navAccountGroup form {
+    flex: 0 0 auto;
+    width: auto;
+  }
+}
+
+.sai-landing .navAccountGroup .navLoginBtn {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
+  .sai-landing .nav:has(.navinner--cms),
+  .sai-landing .nav:has(.navinner--admin-session) {
+    z-index: 30;
+  }
+
+  .sai-landing .navinner--cms .navDrawer,
+  .sai-landing .navinner--auth.navinner--admin-session .navDrawer {
     position: absolute;
     top: calc(100% + 8px);
     left: 12px;
@@ -312,7 +852,8 @@
   }
 
   .sai-landing .navinner--auth .navDrawer__eyebrow,
-  .sai-landing .navinner--cms .navDrawer__eyebrow {
+  .sai-landing .navinner--cms .navDrawer__eyebrow,
+  .sai-landing .navinner--member-session .navDrawer__eyebrow {
     display: block;
     margin: 0 6px 2px;
     font-size: 0.68rem;
@@ -324,8 +865,10 @@
 
   .sai-landing .navinner--auth .navDrawer__links,
   .sai-landing .navinner--cms .navDrawer__links,
+  .sai-landing .navinner--member-session .navDrawer__links,
   .sai-landing .navinner--auth .siteNavLinks.navDrawer__links,
-  .sai-landing .navinner--cms .siteNavLinks.navDrawer__links {
+  .sai-landing .navinner--cms .siteNavLinks.navDrawer__links,
+  .sai-landing .navinner--member-session .siteNavLinks.navDrawer__links {
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
@@ -343,15 +886,16 @@
     border: none;
   }
 
-  .sai-landing .navinner--auth .navDrawer__links a,
-  .sai-landing .navinner--cms .navDrawer__links a,
-  .sai-landing .navinner--auth .navDrawer__link,
-  .sai-landing .navinner--cms .navDrawer__link {
+  .sai-landing .navinner--auth .navDrawer__links a:not(.navDrawer__link--foro),
+  .sai-landing .navinner--cms .navDrawer__links a:not(.navDrawer__link--foro),
+  .sai-landing .navinner--auth .navDrawer__link:not(.navDrawer__link--foro),
+  .sai-landing .navinner--cms .navDrawer__link:not(.navDrawer__link--foro) {
     display: flex;
     align-items: center;
     width: 100%;
     min-height: 46px;
     padding: 11px 14px;
+    border: none;
     border-radius: 14px;
     white-space: normal;
     font-size: 0.98rem;
@@ -415,18 +959,6 @@
     border-radius: 999px;
   }
 
-  .sai-landing .nav--open .navScrim {
-    display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 18;
-    border: 0;
-    padding: 0;
-    margin: 0;
-    background: rgba(16, 47, 42, 0.28);
-    backdrop-filter: blur(2px);
-    cursor: pointer;
-  }
 }
 
 @media (max-width: 900px) {
@@ -442,10 +974,11 @@
     flex: none;
     flex-direction: column;
     align-items: stretch;
-    gap: 14px;
-    max-height: min(78dvh, 620px);
+    gap: 10px;
+    max-height: min(calc(100dvh - 72px), 94dvh);
+    overflow-x: hidden;
     overflow-y: auto;
-    padding: 16px 14px 18px;
+    padding: 14px 12px 16px;
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(18px);
     border: 1px solid rgba(15, 59, 52, 0.1);
@@ -456,12 +989,14 @@
 
   .sai-landing .navDrawer__eyebrow {
     display: block;
-    margin: 0 6px 2px;
-    font-size: 0.68rem;
+    flex-shrink: 0;
+    margin: 0 4px 4px;
+    font-size: 0.65rem;
     font-weight: 800;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: #8a938c;
+    line-height: 1.2;
   }
 
   .sai-landing .navDrawer__links,
@@ -472,9 +1007,10 @@
     justify-content: flex-start;
     flex: 0 0 auto;
     width: 100%;
-    gap: 4px;
-    padding: 0;
+    gap: 3px;
+    padding: 0 2px 6px;
     border: none;
+    overflow: visible;
   }
 
   .sai-landing .navDrawer__links > * + *,
@@ -484,19 +1020,48 @@
     border: none;
   }
 
-  .sai-landing .navDrawer__links a,
-  .sai-landing .navDrawer__link {
+  .sai-landing .navDrawer__links > .navDrawer__link--foro {
+    margin-left: 0;
+    padding-left: 16px;
+  }
+
+  .sai-landing .navDrawer__links a:not(.navDrawer__link--foro),
+  .sai-landing .navDrawer__link:not(.navDrawer__link--foro) {
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 46px;
-    padding: 11px 14px;
-    border-radius: 14px;
+    min-height: 40px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 12px;
     white-space: normal;
-    font-size: 0.98rem;
+    font-size: 0.94rem;
     font-weight: 700;
+    line-height: 1.3;
     color: var(--green);
     background: transparent;
+  }
+
+  .sai-landing .navDrawer__links a.navDrawer__link--foro,
+  .sai-landing .navDrawer__links .navDrawer__link--foro {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 8px 12px;
+    margin-top: 4px;
+    border: 2.5px solid #0f3b34;
+    border-radius: 999px;
+    white-space: normal;
+    font: inherit;
+    font-size: 0.94rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--green);
+    background: transparent;
+    box-sizing: border-box;
   }
 
   .sai-landing .navDrawer__links a:hover,
@@ -504,12 +1069,18 @@
     background: #f3efe7;
   }
 
+  .sai-landing .navDrawer__link--foro:hover {
+    background: rgba(15, 59, 52, 0.06);
+    color: var(--green);
+  }
+
   .sai-landing .navDrawer__actions,
   .sai-landing .navActions.navDrawer__actions {
     flex-direction: column;
     align-items: stretch;
+    flex-shrink: 0;
     width: 100%;
-    margin-top: 2px;
+    margin-top: 0;
     padding: 12px;
     border: 1px solid rgba(15, 59, 52, 0.08);
     border-radius: 18px;
@@ -553,6 +1124,27 @@
     border-radius: 999px;
   }
 
+  .sai-landing .navDrawer__actions .navCtaCompact--contact {
+    order: -1;
+    min-height: 50px;
+    margin: 8px 6px;
+  }
+
+  .sai-landing .navDrawer__actions .navLoginBtn {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    box-shadow: none;
+    font-weight: 650;
+    min-height: 42px;
+  }
+
+  .sai-landing .navDrawer__actions .navLoginBtn:hover {
+    background: rgba(15, 59, 52, 0.06);
+    color: var(--green);
+    transform: none;
+  }
+
   .sai-landing .navDrawer__actions form {
     width: 100%;
     margin: 0;
@@ -562,16 +1154,59 @@
     width: 100%;
   }
 
-  .sai-landing .navScrim {
-    display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 18;
-    border: 0;
-    padding: 0;
-    margin: 0;
-    background: rgba(16, 47, 42, 0.28);
-    backdrop-filter: blur(2px);
-    cursor: pointer;
+  /* Miembro: mismo menú desplegable que visitante; Salir | Mi perfil en fila */
+  .sai-landing .navinner--member-session .navDrawer {
+    gap: 10px;
+    max-height: min(calc(100dvh - 72px), 94dvh);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 14px 12px 16px;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__eyebrow {
+    margin: 0 4px 4px;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__links,
+  .sai-landing .navinner--member-session .siteNavLinks.navDrawer__links {
+    flex: 0 0 auto;
+    gap: 3px;
+    padding: 0 2px 6px;
+    overflow: visible;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__links a:not(.navDrawer__link--foro),
+  .sai-landing .navinner--member-session .navDrawer__link:not(.navDrawer__link--foro) {
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 0.94rem;
+    line-height: 1.3;
+    border-radius: 12px;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__actions {
+    margin-top: 0;
+    flex-shrink: 0;
+  }
+
+  .sai-landing .navinner--member-session .navAccountGroup {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__actions .navAccountGroup form,
+  .sai-landing .navinner--member-session .navDrawer__actions .navAccountGroup > button.navLoginBtn,
+  .sai-landing .navinner--member-session .navDrawer__actions .navAccountGroup > a[href="/perfil"] {
+    flex: 1 1 50%;
+    width: auto;
+    min-width: 0;
+  }
+
+  .sai-landing .navinner--member-session .navDrawer__actions .navAccountGroup form .btn {
+    width: 100%;
+    justify-content: center;
   }
 }

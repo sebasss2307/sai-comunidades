@@ -5,9 +5,13 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 import { publicAssetPath } from "@/lib/public-asset-path";
-import { LogoutButton } from "@/ui/layout/logout-button";
-import { resolveMarketingNavLinks } from "@/ui/layout/marketing-nav-model";
-import { NavCtaGroup } from "@/ui/layout/nav-cta-group";
+import { MarketingNavActions } from "@/ui/layout/marketing-nav-actions";
+import {
+  isContactPath,
+  isSectionNavPath,
+  resolveMarketingNavLinks,
+  sectionNavTitle,
+} from "@/ui/layout/marketing-nav-model";
 import { NavMenuButton } from "@/ui/layout/nav-menu-button";
 import { useAppPathname } from "@/ui/layout/use-app-pathname";
 import { useNavDrawer } from "@/ui/layout/use-nav-drawer";
@@ -18,84 +22,46 @@ type Props = {
   isAdmin: boolean;
 };
 
-function ProfileNavLabel({ userName }: { userName: string | null }) {
-  const name = userName?.trim();
-  if (!name) {
-    return <>Mi perfil</>;
-  }
-  return (
-    <>
-      Mi perfil
-      <span className="navUserName"> - {name}</span>
-    </>
-  );
-}
-
 export function MarketingSiteNavClient({
   isLoggedIn,
-  userName,
+  userName: _userName,
   isAdmin,
 }: Props) {
   const { open, close, toggle, panelId } = useNavDrawer();
   const pathname = useAppPathname();
   const onAdminRoute =
     pathname === "/admin" || pathname.startsWith("/admin/");
+  const onContactRoute = isContactPath(pathname);
+  const onSectionNav = isSectionNavPath(pathname);
+  const sectionTitle = sectionNavTitle(pathname);
 
   const navLinks = useMemo(
-    () => resolveMarketingNavLinks({ onAdminRoute, isAdmin }),
-    [onAdminRoute, isAdmin],
+    () => resolveMarketingNavLinks({ onAdminRoute, isAdmin, onContactRoute }),
+    [onAdminRoute, isAdmin, onContactRoute],
   );
 
-  const showMarketingCta = !onAdminRoute;
+  const isMemberSession =
+    isLoggedIn && !isAdmin && !onAdminRoute && !onSectionNav;
+
   const navinnerClass = [
     "wrap",
     "navinner",
-    isLoggedIn ? "navinner--auth" : "",
-    onAdminRoute ? "navinner--cms" : "",
-    isLoggedIn && isAdmin && !onAdminRoute ? "navinner--admin-session" : "",
+    onSectionNav ? "navinner--forum navinner--profile" : "",
+    !onSectionNav && isLoggedIn ? "navinner--auth" : "",
+    !onSectionNav && onAdminRoute ? "navinner--cms" : "",
+    !onSectionNav && isLoggedIn && isAdmin ? "navinner--admin-session" : "",
+    isMemberSession ? "navinner--member-session" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
-  const drawerActions = isLoggedIn ? (
-    <>
-      {showMarketingCta && isAdmin ? (
-        <NavCtaGroup isAdmin compact showContact onNavigate={close} />
-      ) : null}
-      {showMarketingCta && !isAdmin ? (
-        <NavCtaGroup
-          isAdmin={false}
-          showContact
-          onNavigate={close}
-        />
-      ) : null}
-      {!onAdminRoute ? (
-        <div className="navAccountGroup">
-          <Link className="btn light" href="/perfil" onClick={close}>
-            <ProfileNavLabel userName={userName} />
-          </Link>
-          <LogoutButton className="btn light">Salir</LogoutButton>
-        </div>
-      ) : (
-        <LogoutButton className="btn light">Salir</LogoutButton>
-      )}
-    </>
-  ) : (
-    <>
-      <Link
-        className="btn light navLoginBtn"
-        href="/iniciar-sesion"
-        onClick={close}
-      >
-        Entrar
-      </Link>
-      <Link className="btn light" href="/registro" onClick={close}>
-        Registro
-      </Link>
-      {showMarketingCta ? (
-        <NavCtaGroup isAdmin={isAdmin} onNavigate={close} />
-      ) : null}
-    </>
+  const navActions = (
+    <MarketingNavActions
+      isLoggedIn={isLoggedIn}
+      isAdmin={isAdmin}
+      onNavigate={close}
+      showContact={!onContactRoute}
+    />
   );
 
   return (
@@ -108,49 +74,85 @@ export function MarketingSiteNavClient({
           </span>
         </div>
       </div>
+      {open ? (
+        <button
+          type="button"
+          className="navScrim"
+          aria-label="Cerrar menú"
+          onClick={close}
+          tabIndex={-1}
+        />
+      ) : null}
       <header className={`nav${open ? " nav--open" : ""}`}>
-        {open ? (
-          <button
-            type="button"
-            className="navScrim"
-            aria-label="Cerrar menú"
-            onClick={close}
-            tabIndex={-1}
-          />
-        ) : null}
         <div className={navinnerClass}>
-          <Link className="brand" href="/" aria-label="SAI Comunidades, inicio">
-            <Image
-              src={publicAssetPath("/landing/logo.png")}
-              alt="SAI Comunidades"
-              width={140}
-              height={58}
-              priority
-            />
-          </Link>
-          <NavMenuButton open={open} panelId={panelId} onToggle={toggle} />
-          <div
-            id={panelId}
-            className={`navDrawer${open ? " navDrawer--open" : ""}`}
-          >
-            <p className="navDrawer__eyebrow">Explorar</p>
-            <nav
-              className="siteNavLinks navDrawer__links"
-              aria-label="Principal"
-            >
-              {navLinks.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={close}
-                  className="navDrawer__link"
+          {onSectionNav ? (
+            <>
+              <Link className="navBackBtn" href="/" onClick={close}>
+                <span className="navBackBtn__icon" aria-hidden>
+                  ←
+                </span>
+                <span className="navBackBtn__label">Volver</span>
+              </Link>
+              <p className="navForumTitle" aria-current="page">
+                {sectionTitle}
+              </p>
+              <div className="navForumActions navDrawer__actions">
+                {navActions}
+              </div>
+              <NavMenuButton
+                open={open}
+                panelId={panelId}
+                onToggle={toggle}
+              />
+              <div
+                id={panelId}
+                className={`navForumMobilePanel${
+                  open ? " navForumMobilePanel--open" : ""
+                }`}
+              >
+                <div className="navActions navDrawer__actions">{navActions}</div>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link className="brand" href="/" aria-label="SAI Comunidades, inicio">
+                <Image
+                  src={publicAssetPath("/landing/logo.png")}
+                  alt="SAI Comunidades"
+                  width={140}
+                  height={58}
+                  priority
+                />
+              </Link>
+              <NavMenuButton open={open} panelId={panelId} onToggle={toggle} />
+              <div
+                id={panelId}
+                className={`navDrawer${open ? " navDrawer--open" : ""}`}
+              >
+                <p className="navDrawer__eyebrow">Explorar</p>
+                <nav
+                  className="siteNavLinks navDrawer__links"
+                  aria-label="Principal"
                 >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-            <div className="navActions navDrawer__actions">{drawerActions}</div>
-          </div>
+                  {navLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={close}
+                      className={
+                        item.href === "/foro"
+                          ? "navDrawer__link navDrawer__link--foro"
+                          : "navDrawer__link"
+                      }
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </nav>
+                <div className="navActions navDrawer__actions">{navActions}</div>
+              </div>
+            </>
+          )}
         </div>
       </header>
     </>

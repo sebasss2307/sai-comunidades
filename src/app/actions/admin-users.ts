@@ -84,8 +84,8 @@ export async function deleteUserAction(
     return { error: "Usuario no encontrado." };
   }
 
-  if (existing.role === "admin" && (await repo.countAdmins()) <= 1) {
-    return { error: "No puedes eliminar al único administrador." };
+  if (existing.role === "admin") {
+    return { error: "Las cuentas de administrador no se pueden eliminar." };
   }
 
   const deleted = await repo.delete(userId);

@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { getAuthService } from "@/auth/services/mock-auth-service";
+import { isAdmin } from "@/domain/user";
 import { mockForumThreads } from "@/data/mock/forum";
-import { formatDate } from "@/lib/utils/format-date";
 import { getForumRepository } from "@/repositories";
 import { ReplyForm } from "@/ui/forum/reply-form";
+import { ForumThreadPosts } from "@/ui/forum/forum-thread-posts";
 
 export function generateStaticParams() {
   return mockForumThreads.map((thread) => ({ threadId: thread.id }));
@@ -30,31 +32,28 @@ export default async function ThreadPage({ params }: PageProps) {
   const thread = await repo.getThreadById(threadId);
   if (!thread) notFound();
 
+  const session = await getAuthService().getSession();
+  const viewerIsAdmin = session ? isAdmin(session.user) : false;
+
   return (
-    <section className="appSection forum">
+    <section className="appSection forum forumThreadPage">
       <div className="wrap" style={{ maxWidth: 760 }}>
-        <Link href="/foro" className="backLink">
-          ← Volver al foro
-        </Link>
-        <h1 className="appPageTitle" style={{ marginTop: 16 }}>
-          {thread.title}
-        </h1>
+        <header className="forumThreadIntro">
+          <Link href="/foro" className="backLink backLink--chip">
+            <span className="backLink__icon" aria-hidden>
+              ←
+            </span>
+            <span>Volver al foro</span>
+          </Link>
+          <h1 className="appPageTitle forumThreadTitle">{thread.title}</h1>
+        </header>
         <div style={{ marginTop: 28 }}>
-          {thread.posts.map((post) => (
-            <article className="post" key={post.id}>
-              <div className="postMeta">
-                <span className="avatar">
-                  {post.authorName.trim().charAt(0).toUpperCase()}
-                </span>
-                <b>{post.authorName}</b>
-                <span>·</span>
-                <span>{formatDate(post.createdAt)}</span>
-              </div>
-              <p style={{ margin: "12px 0 0", color: "#626d65" }}>
-                {post.body}
-              </p>
-            </article>
-          ))}
+          <ForumThreadPosts
+            threadId={thread.id}
+            threadTitle={thread.title}
+            posts={thread.posts}
+            initialIsAdmin={viewerIsAdmin}
+          />
         </div>
         <article className="forumPanel" style={{ marginTop: 24 }}>
           <ReplyForm threadId={thread.id} />

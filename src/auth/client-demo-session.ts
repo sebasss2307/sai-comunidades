@@ -6,6 +6,13 @@ import { mockUsers } from "@/data/mock/users";
 
 const STORAGE_KEY = "sai-mock-client-session";
 
+export const DEMO_SESSION_CHANGE_EVENT = "sai-demo-session-change";
+
+export function notifyDemoSessionChange(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(DEMO_SESSION_CHANGE_EVENT));
+}
+
 export function readClientDemoSession(): Session | null {
   if (typeof window === "undefined") return null;
   try {
@@ -27,9 +34,11 @@ export function writeClientDemoSession(session: Session | null): void {
   if (typeof window === "undefined") return;
   if (!session) {
     window.localStorage.removeItem(STORAGE_KEY);
+    notifyDemoSessionChange();
     return;
   }
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+  notifyDemoSessionChange();
 }
 
 export function isClientDemoUiEnabled(): boolean {

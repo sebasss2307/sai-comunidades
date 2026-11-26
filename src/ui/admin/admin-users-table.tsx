@@ -23,8 +23,13 @@ type Draft = {
   password: string;
 };
 
+function roleLabel(role: UserRole) {
+  return role === "admin" ? "Admin" : "Miembro";
+}
+
 export function AdminUsersTable({ users, currentUserId }: Props) {
   const [localUsers, setLocalUsers] = useState(users);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<User | null>(null);
@@ -113,8 +118,102 @@ export function AdminUsersTable({ users, currentUserId }: Props) {
     });
   };
 
+  const renderRowActions = (user: User) => (
+    <div className="adminUsersRowActions">
+      <button
+        type="button"
+        className="btn light"
+        onClick={() => openEdit(user)}
+      >
+        Modificar
+      </button>
+      {user.role !== "admin" ? (
+        <button
+          type="button"
+          className="btn"
+          disabled={pending || user.id === currentUserId}
+          title={
+            user.id === currentUserId
+              ? "No puedes eliminar tu propia cuenta"
+              : undefined
+          }
+          onClick={() => {
+            setActionError(null);
+            setDeleteTarget(user);
+            setConfirmKind("delete");
+          }}
+        >
+          Eliminar
+        </button>
+      ) : null}
+    </div>
+  );
+
+  const toggleExpanded = (userId: string) => {
+    setExpandedId((current) => (current === userId ? null : userId));
+  };
+
   return (
     <div className="adminUsersPanel">
+      <p className="adminUsersAccordionBar">Usuarios · panel MOCK</p>
+      <div className="adminUsersAccordion" role="list">
+        {localUsers.map((user) => {
+          const isOpen = expandedId === user.id;
+          const bodyId = `admin-user-accordion-${user.id}`;
+          return (
+            <article
+              key={user.id}
+              role="listitem"
+              className={`adminUsersAccordionItem${
+                isOpen ? " adminUsersAccordionItem--open" : ""
+              }`}
+            >
+              <button
+                type="button"
+                className="adminUsersAccordionSummary"
+                aria-expanded={isOpen}
+                aria-controls={bodyId}
+                onClick={() => toggleExpanded(user.id)}
+              >
+                <span
+                  className={`adminUsersAccordionBadge adminUsersAccordionBadge--${user.role}`}
+                >
+                  {roleLabel(user.role)}
+                </span>
+                <span className="adminUsersAccordionTitle">{user.name}</span>
+                <span className="adminUsersAccordionSub">{user.email}</span>
+                <span className="adminUsersAccordionChevron" aria-hidden="true" />
+              </button>
+              <div
+                id={bodyId}
+                className="adminUsersAccordionBody"
+                hidden={!isOpen}
+              >
+                <dl className="adminUsersAccordionGrid">
+                  <div>
+                    <dt>Nombre</dt>
+                    <dd>{user.name}</dd>
+                  </div>
+                  <div>
+                    <dt>Correo</dt>
+                    <dd>{user.email}</dd>
+                  </div>
+                  <div>
+                    <dt>Rol</dt>
+                    <dd>{roleLabel(user.role)}</dd>
+                  </div>
+                  <div>
+                    <dt>Alta</dt>
+                    <dd>{formatDate(user.createdAt)}</dd>
+                  </div>
+                </dl>
+                {renderRowActions(user)}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
       <div className="adminUsersTableWrap">
         <table className="dataTable adminUsersTable">
           <thead>
@@ -139,34 +238,7 @@ export function AdminUsersTable({ users, currentUserId }: Props) {
                 <td style={{ color: "var(--muted)" }}>
                   {formatDate(user.createdAt)}
                 </td>
-                <td>
-                  <div className="adminUsersRowActions">
-                    <button
-                      type="button"
-                      className="btn light"
-                      onClick={() => openEdit(user)}
-                    >
-                      Modificar
-                    </button>
-                    <button
-                      type="button"
-                      className="btn"
-                      disabled={pending || user.id === currentUserId}
-                      title={
-                        user.id === currentUserId
-                          ? "No puedes eliminar tu propia cuenta"
-                          : undefined
-                      }
-                      onClick={() => {
-                        setActionError(null);
-                        setDeleteTarget(user);
-                        setConfirmKind("delete");
-                      }}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </td>
+                <td>{renderRowActions(user)}</td>
               </tr>
             ))}
           </tbody>

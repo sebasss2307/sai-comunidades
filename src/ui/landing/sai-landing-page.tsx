@@ -33,7 +33,9 @@ export function SaiLandingPage({
         <section className="hero" id="inicio">
           <div className="wrap heroGrid">
             <div>
-              <div className="eyebrow">Administración · Gestión · Comunidades</div>
+              <div className="eyebrow heroEyebrow">
+                Administración · Gestión · Comunidades
+              </div>
               <h1>Una comunidad bien administrada se nota.</h1>
               <p>
                 Administración y gestión de edificios y condominios con procesos
@@ -41,7 +43,7 @@ export function SaiLandingPage({
                 espacio compartido.
               </p>
               <div className="heroActions">
-                <Link className="btn" href="/contacto">
+                <Link className="btn contactCtaRing" href="/contacto">
                   Solicitar una conversación ↗
                 </Link>
                 <a className="btn light" href="#servicios">
@@ -188,7 +190,7 @@ export function SaiLandingPage({
                   conversación inicial.
                 </p>
               </div>
-              <Link className="btn" href="/contacto">
+              <Link className="btn contactCtaRing" href="/contacto">
                 Ir al formulario de contacto ↗
               </Link>
             </div>

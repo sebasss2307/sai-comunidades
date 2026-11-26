@@ -77,7 +77,9 @@ export async function demoRoleAction(formData: FormData): Promise<void> {
     | "admin";
   const auth = getAuthService();
   await auth.impersonateDemo(role);
-  if (role === "admin") redirect("/admin");
-  if (role === "user") redirect("/foro");
+  const returnTo = String(formData.get("returnTo") ?? "");
+  const safeReturn =
+    returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/";
+  if (role === "admin" || role === "user") redirect(safeReturn);
   redirect("/");
 }
